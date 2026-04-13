@@ -29,7 +29,7 @@ RUN apt-get update && \
 RUN usermod -u 1000 abc && groupmod -g 1000 abc
 
 # Store repo-managed defaults here (safe from volume overrides)
-COPY ./files/* /defaults/
+COPY ./files/ /defaults/
 
 # Add init script
 COPY ./init-config.sh /usr/local/bin/init-config.sh
