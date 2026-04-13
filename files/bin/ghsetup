@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Add SSH Key to Agent for use with Code-Server
+ssh-add ~/.ssh/id_ed25519

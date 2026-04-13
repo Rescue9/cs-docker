@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# bash script to reinstall apt packages after container upgrade
+sudo apt update
+sudo apt-get install unzip wget zip lsof xz-utils pkg-config build-essential clang lld cmake ninja-build libgtk-3-dev mesa-utils

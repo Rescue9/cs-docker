@@ -1,0 +1,12 @@
+[user]
+	name = Rescue9
+	email = andrew.buskov@gmail.com
+	signingkey = /config/.ssh/id_ed25519.pub
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true
+[tag]
+	gpgsign = true
+[pull]
+	rebase = false

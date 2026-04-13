@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# serve flutter web-server
+flutter run -d web-server --web-hostname 0.0.0.0 --web-port 5173 --no-injected-client
