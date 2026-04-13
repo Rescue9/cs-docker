@@ -1,0 +1,9 @@
+{
+    "dart.flutterSdkPath": "/config/sdks/flutter",
+    "java.configuration.runtimes": [
+
+        {"name": "JavaSE-21",
+         "path": "/config/sdks/jdk-21.0.10+7"
+        }
+    ]
+}
