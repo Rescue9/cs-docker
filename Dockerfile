@@ -26,6 +26,8 @@ RUN apt-get update && \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+RUN usermod -u 1000 abc && groupmod -g 1000 abc
+
 # Store repo-managed defaults here (safe from volume overrides)
 #COPY ./files/ /defaults/
 
