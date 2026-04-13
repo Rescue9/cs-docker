@@ -18,14 +18,12 @@ export SDKS=$HOME/sdks
 export PATH=$PATH:$SDKS/flutter/bin
 
 # Java
-export JDK_HOME=$SDKS/jdk-21.0.10+7/bin
-export JAVA_HOME=$SDKS/jdk-21.0.10+7/bin
+export JAVA_HOME=$SDKS/jdk-21.0.10+7
 export PATH=$PATH:$SDKS/jdk-21.0.10+7/bin
 
 # Android
 export ANDROID_HOME=$SDKS/android
-export ANDROID_SDK_ROOT=$ANDROID_HOME
-
+#export ANDROID_SDK_ROOT=$ANDROID_HOME
 export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 
