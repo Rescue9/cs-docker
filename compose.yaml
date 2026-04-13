@@ -1,6 +1,7 @@
 services:
   code-server:
-    build: .
+    image:
+      build: .
     container_name: cs-git
     environment:
       - PUID=${UID}
