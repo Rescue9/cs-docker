@@ -1,4 +1,7 @@
 {
     "workbench.colorTheme": "Dark 2026",
-    "window.menuBarVisibility": "classic"
+    "window.menuBarVisibility": "classic",
+    "terminal.integrated.initialHint": false,
+    "redhat.telemetry.enabled": false,
+    "remote.autoForwardPorts": false
 }
