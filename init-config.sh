@@ -10,7 +10,7 @@ if [ -z "$(ls -A /config 2>/dev/null)" ]; then
     cp -r /defaults/* /config/
 else
     echo "Config exists, merging updates..."
-    rsync -av --ignore-existing /defaults/ /config/
+    rsync -av --update /defaults/data/User/ /config/data/User/
 fi
 
 # Fix ownership (important for linuxserver containers)
