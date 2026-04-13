@@ -11,7 +11,7 @@ services:
       - PROXY_DOMAIN=${PRXYDMN}  # optional
       - DEFAULT_WORKSPACE=/config/workspace # optional
     volumes:
-      - ${CSHOME}/config:/config
+      - ${CSHOME}:/config
     ports:
       - 8443:8443
     restart: unless-stopped
