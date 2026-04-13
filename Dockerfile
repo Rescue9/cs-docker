@@ -29,16 +29,16 @@ RUN apt-get update && \
 RUN usermod -u 1000 abc && groupmod -g 1000 abc
 
 # Store repo-managed defaults here (safe from volume overrides)
-#COPY ./files/ /defaults/
+COPY ./files/ /defaults/
 
 # Add init script
-#COPY ./init-config.sh /usr/local/bin/init-config.sh
-#RUN chmod +x /usr/local/bin/init-config.sh
+COPY ./init-config.sh /usr/local/bin/init-config.sh
+RUN chmod +x /usr/local/bin/init-config.sh
 
 # Hook into container startup
-#ENTRYPOINT ["/usr/local/bin/init-config.sh"]
+ENTRYPOINT ["/usr/local/bin/init-config.sh"]
 
 # Fall back to original entrypoint behavior
-#CMD ["/init"]
+CMD ["/init"]
 
 USER abc
