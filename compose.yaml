@@ -3,8 +3,8 @@ services:
     build: .
     container_name: cs-git
     environment:
-      - PUID=${UID}
-      - PGID=${GID}
+      - PUID=1000
+      - PGID=1000
       - TZ=${TZ}
       - PASSWORD=${PASSWD}        # optional
       - SUDO_PASSWORD=${SUDOPWD}   # optional
