@@ -1,0 +1,17 @@
+services:
+  code-server:
+    build: .
+    container_name: cs-git
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TZ}
+      - PASSWORD=${PASSWD}        # optional
+      - SUDO_PASSWORD=${SUDOPWD}   # optional
+      - PROXY_DOMAIN=${PRXYDMN}  # optional
+      - DEFAULT_WORKSPACE=/config/workspace # optional
+    volumes:
+      - ${CSHOME}/config:/config
+    ports:
+      - 8443:8443
+    restart: unless-stopped
