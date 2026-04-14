@@ -29,7 +29,7 @@ if [ ! -f "$MARKER" ]; then
         while read -r ext || [ -n "$ext" ]; do
             [ -z "$ext" ] && continue
             echo "Installing $ext"
-            su-exec abc bash -c "code-server --install-extension '$ext'" || true
+            runuser -u abc -- code-server --install-extension "$ext" || true
         done < "$EXT_FILE"
     fi
 
@@ -40,4 +40,4 @@ else
 fi
 
 # Start code-server as abc
-exec su-exec abc "$@"
+exec runuser -u abc -- "$@"

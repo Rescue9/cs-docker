@@ -25,7 +25,7 @@ RUN apt-get update && \
         git \
         ca-certificates \
         rsync \
-        su-exec \
+        runuser \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -55,7 +55,6 @@ RUN mkdir -p $ANDROID_HOME/cmdline-tools && \
     mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest && \
     rm /tmp/tools.zip
 
-# Install SDK packages
 RUN yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
     "platform-tools" \
     "platforms;android-34" \
@@ -70,7 +69,7 @@ RUN mkdir -p /config/sdks && \
     git clone https://github.com/flutter/flutter.git -b stable $FLUTTER_HOME
 
 # =========================
-# PATH setup
+# PATH
 # =========================
 ENV PATH=$PATH:/config/bin:$FLUTTER_HOME/bin:$JAVA_HOME/bin:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
 
