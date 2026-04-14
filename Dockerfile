@@ -27,7 +27,8 @@ COPY ./files/ /defaults/
 COPY ./init-config.sh /usr/local/bin/init-config.sh
 RUN chmod +x /usr/local/bin/init-config.sh
 
-RUN find / -name "extensions.txt" || true
+RUN echo "SEARCHING FOR extensions.txt - $(date)" && \
+    find / -name "extensions.txt" 2>/dev/null || true
 
 ENTRYPOINT ["/usr/local/bin/init-config.sh"]
 CMD ["/init"]
