@@ -23,6 +23,7 @@ ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 ENV EXT_CACHE=/config/.extension-cache
 RUN mkdir -p /config/.extension-cache
 
+RUN rm -rf /defaults/*
 COPY ./files/ /defaults/
 COPY ./init-config.sh /usr/local/bin/init-config.sh
 RUN chmod +x /usr/local/bin/init-config.sh
