@@ -41,7 +41,7 @@ fi
 # =========================
 MANIFEST="/defaults/extensions.json"
 MARKER="/config/.extensions_installed"
-EXT_DIR="/config/data/extensions"
+EXT_DIR="/config/extensions"
 
 chown -R abc:abc /config
 

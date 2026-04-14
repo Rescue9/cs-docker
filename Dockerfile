@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # =========================
 # BUILD VERSION (change this to force rebuild)
 # =========================
-RUN echo "BUILD VERSION 20 - $(date)" > /BUILD_VERSION
+RUN echo "BUILD VERSION 21 - $(date)" > /BUILD_VERSION
 
 RUN apt-get update && \
     apt-get install -y \
