@@ -25,17 +25,12 @@ RUN apt-get update && \
         git \
         ca-certificates \
         rsync \
-        runuser \
+        util-linux \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # =========================
-# User setup
-# =========================
-RUN usermod -u 1000 abc && groupmod -g 1000 abc
-
-# =========================
-# Java (Temurin via apt)
+# Java
 # =========================
 RUN apt-get update && \
     apt-get install -y openjdk-21-jdk && \
@@ -44,7 +39,7 @@ RUN apt-get update && \
 ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 
 # =========================
-# Android SDK (cmdline tools)
+# Android SDK
 # =========================
 ENV ANDROID_HOME=/config/sdks/android
 ENV ANDROID_SDK_ROOT=/config/sdks/android
@@ -83,3 +78,5 @@ RUN chmod +x /usr/local/bin/init-config.sh
 
 ENTRYPOINT ["/usr/local/bin/init-config.sh"]
 CMD ["/init"]
+
+# IMPORTANT: do NOT set USER abc (linuxserver handles this)
