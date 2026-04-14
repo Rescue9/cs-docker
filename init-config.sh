@@ -37,12 +37,16 @@ if [ -z "$CODE_SERVER_BIN" ] && [ -x /app/code-server/bin/code-server ]; then
 fi
 
 # =========================
-# Extensions (JSON manifest + cache + parallel + retry)
+# Extensions
 # =========================
 MANIFEST="/defaults/extensions.json"
 MARKER="/config/.extensions_installed"
 EXT_DIR="/config/data/extensions"
 
+chown -R abc:abc /config
+
+touch "$MARKER"
+chown abc:abc "$MARKER"
 
 mkdir -p "$EXT_DIR"
 

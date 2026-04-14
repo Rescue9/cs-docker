@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # =========================
 # BUILD VERSION (change this to force rebuild)
 # =========================
-RUN echo "BUILD VERSION 13 - $(date)" > /BUILD_VERSION
+RUN echo "BUILD VERSION 14 - $(date)" > /BUILD_VERSION
 
 RUN apt-get update && \
     apt-get install -y \
@@ -26,6 +26,8 @@ RUN mkdir -p /config/.extension-cache
 COPY ./files/ /defaults/
 COPY ./init-config.sh /usr/local/bin/init-config.sh
 RUN chmod +x /usr/local/bin/init-config.sh
+
+RUN find / -name "extensions.txt" || true
 
 ENTRYPOINT ["/usr/local/bin/init-config.sh"]
 CMD ["/init"]
