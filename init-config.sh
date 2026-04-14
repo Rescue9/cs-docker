@@ -75,11 +75,18 @@ install_ext() {
 export -f install_ext
 export CODE_SERVER_BIN EXT_DIR
 
-if [ ! -f "$MARKER" ]; then
-    echo "Installing extensions (parallel)..."
+LOCK_FILE="/tmp/code_server_extensions.lock"
 
-    jq -r '.extensions[]' "$MANIFEST" | \
-        parallel -j 4 install_ext {}
+exec 200>"$LOCK_FILE"
+flock 200
+
+if [ ! -f "$MARKER" ]; then
+    echo "Installing extensions..."
+
+    while read -r ext; do
+        [ -z "$ext" ] && continue
+        install_ext "$ext"
+    done < <(jq -r '.extensions[]?' "$MANIFEST")
 
     touch "$MARKER"
     chown abc:abc "$MARKER"
