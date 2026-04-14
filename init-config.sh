@@ -45,9 +45,6 @@ EXT_DIR="/config/data/extensions"
 
 chown -R abc:abc /config
 
-touch "$MARKER"
-chown abc:abc "$MARKER"
-
 mkdir -p "$EXT_DIR"
 
 install_ext() {
