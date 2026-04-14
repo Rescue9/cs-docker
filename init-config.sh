@@ -55,6 +55,7 @@ if [ ! -f "$MARKER" ]; then
         while read -r ext || [ -n "$ext" ]; do
             [ -z "$ext" ] && continue
             echo "Installing $ext"
+            echo "RAW EXTENSION LINE: [$ext]"
 
             "$CODE_SERVER_BIN" \
                 --extensions-dir "$EXT_DIR" \
