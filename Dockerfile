@@ -4,7 +4,7 @@ USER root
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN echo "BUILD VERSION 2 - $(date)" > /BUILD_VERSION
+RUN echo "BUILD VERSION 3 - $(date)" > /BUILD_VERSION
 
 # =========================
 # System dependencies
