@@ -1,0 +1,18 @@
+{
+  "extensions": [
+    "vscjava.vscode-java-dependency@0.26.0",
+    "vscjava.vscode-java-pack@0.29.0",
+    "vscjava.vscode-java-test@0.44.0",
+    "vscjava.vscode-java-debug@0.57.0",
+    "vscjava.vscode-maven@0.44.0",
+    "vscjava.vscode-gradle@3.16.0",
+    "redhat.java@1.40.1",
+    "dart-code.flutter@3.108.0",
+    "dart-code.dart-code@3.108.0",
+    "nash.awesome-flutter-snippets@2.0.0",
+    "sickode.sk-flutter@1.1.0",
+    "robert-brunhage.flutter-riverpod-snippets@1.0.0",
+    "adelphes.android-dev-ext@1.5.0",
+    "pavi2410.android-devkit@1.3.0"
+  ]
+}

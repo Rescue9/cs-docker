@@ -18,51 +18,69 @@ fi
 chown -R abc:abc /config
 
 # =========================
-# PATH (runtime-safe)
+# PATH
 # =========================
-export SDK_DIR="/config/sdks"
-
+SDK_DIR="/config/sdks"
 export FLUTTER_HOME="$SDK_DIR/flutter"
 export ANDROID_HOME="$SDK_DIR/android"
 export ANDROID_SDK_ROOT="$SDK_DIR/android"
+export EXT_CACHE="/config/.extension-cache"
 
 export PATH="$PATH:$FLUTTER_HOME/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin:$JAVA_HOME/bin"
 
 # =========================
-# Extensions (FIXED)
+# Locate code-server binary
 # =========================
-EXT_FILE="/defaults/extensions.xyz"
+CODE_SERVER_BIN="$(command -v code-server || true)"
+if [ -z "$CODE_SERVER_BIN" ] && [ -x /app/code-server/bin/code-server ]; then
+    CODE_SERVER_BIN="/app/code-server/bin/code-server"
+fi
+
+# =========================
+# Extensions (JSON manifest + cache + parallel + retry)
+# =========================
+MANIFEST="/defaults/extensions.json"
 MARKER="/config/.extensions_installed"
 EXT_DIR="/config/data/extensions"
 
-CODE_SERVER_BIN="$(command -v code-server || true)"
+mkdir -p "$EXT_DIR" "$EXT_CACHE"
 
-# fallback (linuxserver path)
-if [ -z "$CODE_SERVER_BIN" ]; then
-    if [ -x /app/code-server/bin/code-server ]; then
-        CODE_SERVER_BIN="/app/code-server/bin/code-server"
+install_ext() {
+    local ext="$1"
+    local retries=3
+
+    # skip if already installed (cache check)
+    if "$CODE_SERVER_BIN" --list-extensions --extensions-dir "$EXT_DIR" | grep -q "^${ext%%@*}$"; then
+        echo "✔ Already installed: $ext"
+        return
     fi
-fi
 
-mkdir -p "$EXT_DIR"
+    while [ $retries -gt 0 ]; do
+        echo "Installing: $ext (attempt $((4-retries))/3)"
+
+        if "$CODE_SERVER_BIN" \
+            --extensions-dir "$EXT_DIR" \
+            --install-extension "$ext" \
+            --cache-dir "$EXT_CACHE"; then
+            echo "✔ Installed: $ext"
+            return 0
+        fi
+
+        retries=$((retries-1))
+        sleep 2
+    done
+
+    echo "❌ Failed: $ext"
+    return 1
+}
 
 if [ ! -f "$MARKER" ]; then
-    echo "Installing extensions..."
+    echo "Installing extensions (parallel + retry + cache)..."
 
-    if [ -z "$CODE_SERVER_BIN" ]; then
-        echo "ERROR: code-server binary not found"
-    else
-        while read -r ext || [ -n "$ext" ]; do
-            [ -z "$ext" ] && continue
-            echo "Installing $ext"
-            echo "RAW EXTENSION LINE: [$ext]"
+    EXT_LIST=$(jq -r '.extensions[]' "$MANIFEST")
 
-            "$CODE_SERVER_BIN" \
-                --extensions-dir "$EXT_DIR" \
-                --install-extension "$ext" || true
-
-        done < "$EXT_FILE"
-    fi
+    echo "$EXT_LIST" | \
+        xargs -n 1 -P 4 -I {} bash -c 'install_ext "$@"' _ {}
 
     touch "$MARKER"
     chown abc:abc "$MARKER"
@@ -71,40 +89,30 @@ else
 fi
 
 # =========================
-# SDK INSTALL (runtime, correct location)
+# SDK INSTALLS (unchanged logic can stay here)
 # =========================
-
-# Flutter
 if [ ! -d "$FLUTTER_HOME" ]; then
     echo "Installing Flutter..."
     mkdir -p "$SDK_DIR"
     git clone https://github.com/flutter/flutter.git -b stable "$FLUTTER_HOME"
-    chown -R abc:abc "$FLUTTER_HOME"
 fi
 
-# Android SDK
 if [ ! -d "$ANDROID_HOME/cmdline-tools/latest" ]; then
     echo "Installing Android SDK..."
-
     mkdir -p "$ANDROID_HOME/cmdline-tools"
 
     wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O /tmp/android.zip
-
     unzip -q /tmp/android.zip -d "$ANDROID_HOME/cmdline-tools"
-
     mv "$ANDROID_HOME/cmdline-tools/cmdline-tools" "$ANDROID_HOME/cmdline-tools/latest"
-
     rm /tmp/android.zip
 
     yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
         "platform-tools" \
         "platforms;android-34" \
         "build-tools;34.0.0"
-
-    chown -R abc:abc "$ANDROID_HOME"
 fi
 
 # =========================
-# Start container
+# Start
 # =========================
 exec /init

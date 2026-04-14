@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # =========================
 # BUILD VERSION (change this to force rebuild)
 # =========================
-RUN echo "BUILD VERSION 8 - $(date)" > /BUILD_VERSION
+RUN echo "BUILD VERSION 9 - $(date)" > /BUILD_VERSION
 
 # =========================
 # System dependencies
@@ -36,6 +36,10 @@ RUN apt-get update && \
 
 # Java
 ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+
+# Extension cache directory (offline reuse)
+ENV EXT_CACHE=/config/.extension-cache
+RUN mkdir -p /config/.extension-cache
 
 # Copy defaults
 COPY ./files/ /defaults/
