@@ -4,7 +4,7 @@ set -e
 
 echo "Initializing config..."
 
-# If /config is empty, copy everything
+# Seed /config if empty
 if [ -z "$(ls -A /config 2>/dev/null)" ]; then
     echo "Config is empty, seeding from defaults..."
     cp -r /defaults/. /config/
@@ -13,12 +13,12 @@ else
     rsync -av --ignore-existing /defaults/ /config/
 fi
 
-# Fix ownership (important for linuxserver containers)
+# Fix ownership
 chown -R abc:abc /config
 
-# ----------------------------
+# =========================
 # Extension installation
-# ----------------------------
+# =========================
 EXT_FILE="/defaults/extensions.txt"
 MARKER="/config/.extensions_installed"
 
@@ -31,8 +31,6 @@ if [ ! -f "$MARKER" ]; then
             echo "Installing $ext"
             su-exec abc bash -c "code-server --install-extension '$ext'" || true
         done < "$EXT_FILE"
-    else
-        echo "No extensions.txt found, skipping..."
     fi
 
     touch "$MARKER"
@@ -41,5 +39,5 @@ else
     echo "Extensions already installed, skipping..."
 fi
 
-# Continue with original container startup as abc
+# Start code-server as abc
 exec su-exec abc "$@"
