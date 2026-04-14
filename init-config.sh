@@ -35,17 +35,28 @@ EXT_FILE="/defaults/extensions.txt"
 MARKER="/config/.extensions_installed"
 EXT_DIR="/config/data/extensions"
 
+CODE_SERVER_BIN="$(command -v code-server || true)"
+
+# fallback (linuxserver path)
+if [ -z "$CODE_SERVER_BIN" ]; then
+    if [ -x /app/code-server/bin/code-server ]; then
+        CODE_SERVER_BIN="/app/code-server/bin/code-server"
+    fi
+fi
+
 mkdir -p "$EXT_DIR"
 
 if [ ! -f "$MARKER" ]; then
     echo "Installing extensions..."
 
-    if [ -f "$EXT_FILE" ]; then
+    if [ -z "$CODE_SERVER_BIN" ]; then
+        echo "ERROR: code-server binary not found"
+    else
         while read -r ext || [ -n "$ext" ]; do
             [ -z "$ext" ] && continue
             echo "Installing $ext"
 
-            code-server \
+            "$CODE_SERVER_BIN" \
                 --extensions-dir "$EXT_DIR" \
                 --install-extension "$ext" || true
 
