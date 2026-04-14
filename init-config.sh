@@ -42,9 +42,9 @@ fi
 MANIFEST="/defaults/extensions.json"
 MARKER="/config/.extensions_installed"
 EXT_DIR="/config/data/extensions"
-EXT_CACHE="/config/.extension-cache"
 
-mkdir -p "$EXT_DIR" "$EXT_CACHE"
+
+mkdir -p "$EXT_DIR"
 
 install_ext() {
     local ext="$1"
@@ -60,8 +60,7 @@ install_ext() {
 
         if "$CODE_SERVER_BIN" \
             --extensions-dir "$EXT_DIR" \
-            --install-extension "$ext" \
-            --cache-dir "$EXT_CACHE"; then
+            --install-extension "$ext"; then
             echo "✔ Installed: $ext"
             return 0
         fi
@@ -74,7 +73,7 @@ install_ext() {
 }
 
 export -f install_ext
-export CODE_SERVER_BIN EXT_DIR EXT_CACHE
+export CODE_SERVER_BIN EXT_DIR
 
 if [ ! -f "$MARKER" ]; then
     echo "Installing extensions (parallel)..."
