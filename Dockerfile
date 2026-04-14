@@ -4,7 +4,10 @@ USER root
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN echo "BUILD VERSION 3 - $(date)" > /BUILD_VERSION
+# =========================
+# BUILD VERSION (change this to force rebuild)
+# =========================
+RUN echo "BUILD VERSION 4 - $(date)" > /BUILD_VERSION
 
 # =========================
 # System dependencies
@@ -31,10 +34,10 @@ RUN apt-get update && \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Java home (stable for runtime use)
+# Java
 ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 
-# Copy defaults (extensions, templates, etc.)
+# Copy defaults
 COPY ./files/ /defaults/
 
 # Entrypoint

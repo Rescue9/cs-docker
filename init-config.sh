@@ -5,7 +5,7 @@ set -e
 echo "Initializing config..."
 
 # =========================
-# Seed /config
+# Seed config
 # =========================
 if [ -z "$(ls -A /config 2>/dev/null)" ]; then
     echo "Config empty → seeding defaults..."
@@ -15,11 +15,10 @@ else
     rsync -av --ignore-existing /defaults/ /config/
 fi
 
-# Fix permissions
 chown -R abc:abc /config
 
 # =========================
-# PATH setup (runtime-safe)
+# PATH (runtime-safe)
 # =========================
 export SDK_DIR="/config/sdks"
 
@@ -30,8 +29,40 @@ export ANDROID_SDK_ROOT="$SDK_DIR/android"
 export PATH="$PATH:$FLUTTER_HOME/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin:$JAVA_HOME/bin"
 
 # =========================
-# Install Flutter (runtime)
+# Extensions (FIXED)
 # =========================
+EXT_FILE="/defaults/extensions.txt"
+MARKER="/config/.extensions_installed"
+EXT_DIR="/config/data/extensions"
+
+mkdir -p "$EXT_DIR"
+
+if [ ! -f "$MARKER" ]; then
+    echo "Installing extensions..."
+
+    if [ -f "$EXT_FILE" ]; then
+        while read -r ext || [ -n "$ext" ]; do
+            [ -z "$ext" ] && continue
+            echo "Installing $ext"
+
+            code-server \
+                --extensions-dir "$EXT_DIR" \
+                --install-extension "$ext" || true
+
+        done < "$EXT_FILE"
+    fi
+
+    touch "$MARKER"
+    chown abc:abc "$MARKER"
+else
+    echo "Extensions already installed"
+fi
+
+# =========================
+# SDK INSTALL (runtime, correct location)
+# =========================
+
+# Flutter
 if [ ! -d "$FLUTTER_HOME" ]; then
     echo "Installing Flutter..."
     mkdir -p "$SDK_DIR"
@@ -39,9 +70,7 @@ if [ ! -d "$FLUTTER_HOME" ]; then
     chown -R abc:abc "$FLUTTER_HOME"
 fi
 
-# =========================
-# Install Android SDK (runtime)
-# =========================
+# Android SDK
 if [ ! -d "$ANDROID_HOME/cmdline-tools/latest" ]; then
     echo "Installing Android SDK..."
 
@@ -61,29 +90,6 @@ if [ ! -d "$ANDROID_HOME/cmdline-tools/latest" ]; then
         "build-tools;34.0.0"
 
     chown -R abc:abc "$ANDROID_HOME"
-fi
-
-# =========================
-# Extensions (reliable install)
-# =========================
-EXT_FILE="/defaults/extensions.txt"
-MARKER="/config/.extensions_installed"
-
-if [ ! -f "$MARKER" ]; then
-    echo "Installing extensions..."
-
-    if [ -f "$EXT_FILE" ]; then
-        while read -r ext || [ -n "$ext" ]; do
-            [ -z "$ext" ] && continue
-            echo "Installing $ext"
-            code-server --install-extension "$ext" || true
-        done < "$EXT_FILE"
-    fi
-
-    touch "$MARKER"
-    chown abc:abc "$MARKER"
-else
-    echo "Extensions already installed"
 fi
 
 # =========================
