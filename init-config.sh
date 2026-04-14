@@ -16,5 +16,30 @@ fi
 # Fix ownership (important for linuxserver containers)
 chown -R abc:abc /config
 
-# Continue with original container startup
-exec /init
+# ----------------------------
+# Extension installation
+# ----------------------------
+EXT_FILE="/defaults/extensions.txt"
+MARKER="/config/.extensions_installed"
+
+if [ ! -f "$MARKER" ]; then
+    echo "Installing default extensions..."
+
+    if [ -f "$EXT_FILE" ]; then
+        while read -r ext || [ -n "$ext" ]; do
+            [ -z "$ext" ] && continue
+            echo "Installing $ext"
+            su-exec abc bash -c "code-server --install-extension '$ext'" || true
+        done < "$EXT_FILE"
+    else
+        echo "No extensions.txt found, skipping..."
+    fi
+
+    touch "$MARKER"
+    chown abc:abc "$MARKER"
+else
+    echo "Extensions already installed, skipping..."
+fi
+
+# Continue with original container startup as abc
+exec su-exec abc "$@"

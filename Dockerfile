@@ -23,6 +23,7 @@ RUN apt-get update && \
         git \
         ca-certificates \
         rsync \
+        su-exec \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -40,5 +41,3 @@ ENTRYPOINT ["/usr/local/bin/init-config.sh"]
 
 # Fall back to original entrypoint behavior
 CMD ["/init"]
-
-USER abc
