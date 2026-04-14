@@ -42,6 +42,7 @@ fi
 MANIFEST="/defaults/extensions.json"
 MARKER="/config/.extensions_installed"
 EXT_DIR="/config/data/extensions"
+EXT_CACHE="/config/.extension-cache"
 
 mkdir -p "$EXT_DIR" "$EXT_CACHE"
 
@@ -49,14 +50,13 @@ install_ext() {
     local ext="$1"
     local retries=3
 
-    # skip if already installed (cache check)
     if "$CODE_SERVER_BIN" --list-extensions --extensions-dir "$EXT_DIR" | grep -q "^${ext%%@*}$"; then
         echo "✔ Already installed: $ext"
-        return
+        return 0
     fi
 
     while [ $retries -gt 0 ]; do
-        echo "Installing: $ext (attempt $((4-retries))/3)"
+        echo "Installing: $ext"
 
         if "$CODE_SERVER_BIN" \
             --extensions-dir "$EXT_DIR" \
@@ -71,16 +71,16 @@ install_ext() {
     done
 
     echo "❌ Failed: $ext"
-    return 1
 }
 
+export -f install_ext
+export CODE_SERVER_BIN EXT_DIR EXT_CACHE
+
 if [ ! -f "$MARKER" ]; then
-    echo "Installing extensions (parallel + retry + cache)..."
+    echo "Installing extensions (parallel)..."
 
-    EXT_LIST=$(jq -r '.extensions[]' "$MANIFEST")
-
-    echo "$EXT_LIST" | \
-        xargs -n 1 -P 4 -I {} bash -c 'install_ext "$@"' _ {}
+    jq -r '.extensions[]' "$MANIFEST" | \
+        parallel -j 4 install_ext {}
 
     touch "$MARKER"
     chown abc:abc "$MARKER"
