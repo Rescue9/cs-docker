@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # =========================
 # BUILD VERSION (change this to force rebuild)
 # =========================
-RUN echo "BUILD VERSION 16 - $(date)" > /BUILD_VERSION
+RUN echo "BUILD VERSION 17 - $(date)" > /BUILD_VERSION
 
 RUN apt-get update && \
     apt-get install -y \
@@ -27,8 +27,8 @@ COPY ./files/ /defaults/
 COPY ./init-config.sh /usr/local/bin/init-config.sh
 RUN chmod +x /usr/local/bin/init-config.sh
 
-RUN echo "SEARCHING FOR extensions.txt - $(date)" && \
-    find / -name "extensions.txt" 2>/dev/null || true
+RUN echo "===== SEARCHING FOR extensions.txt - $(date) =====" | tee /EXTENSIONS_INFO && \
+    find / -name "extensions.txt" 2>&1 | tee -a /EXTENSIONS_INFO || true
 
 ENTRYPOINT ["/usr/local/bin/init-config.sh"]
 CMD ["/init"]
