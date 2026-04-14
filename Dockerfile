@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # =========================
 # BUILD VERSION (change this to force rebuild)
 # =========================
-RUN echo "BUILD VERSION 7 - $(date)" > /BUILD_VERSION
+RUN echo "BUILD VERSION 8 - $(date)" > /BUILD_VERSION
 
 # =========================
 # System dependencies
