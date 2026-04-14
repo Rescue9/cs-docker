@@ -31,7 +31,7 @@ export PATH="$PATH:$FLUTTER_HOME/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/
 # =========================
 # Extensions (FIXED)
 # =========================
-EXT_FILE="/defaults/extensions.txt"
+EXT_FILE="/defaults/extensions.xyz"
 MARKER="/config/.extensions_installed"
 EXT_DIR="/config/data/extensions"
 
