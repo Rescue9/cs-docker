@@ -5,21 +5,66 @@ set -e
 echo "Initializing config..."
 
 # =========================
-# Seed config
+# Seed /config
 # =========================
 if [ -z "$(ls -A /config 2>/dev/null)" ]; then
-    echo "Config is empty, seeding from defaults..."
+    echo "Config empty → seeding defaults..."
     cp -r /defaults/. /config/
 else
-    echo "Config exists, merging updates..."
+    echo "Config exists → merging defaults..."
     rsync -av --ignore-existing /defaults/ /config/
 fi
 
-# Fix ownership (safe in linuxserver images)
+# Fix permissions
 chown -R abc:abc /config
 
 # =========================
-# Extensions
+# PATH setup (runtime-safe)
+# =========================
+export SDK_DIR="/config/sdks"
+
+export FLUTTER_HOME="$SDK_DIR/flutter"
+export ANDROID_HOME="$SDK_DIR/android"
+export ANDROID_SDK_ROOT="$SDK_DIR/android"
+
+export PATH="$PATH:$FLUTTER_HOME/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin:$JAVA_HOME/bin"
+
+# =========================
+# Install Flutter (runtime)
+# =========================
+if [ ! -d "$FLUTTER_HOME" ]; then
+    echo "Installing Flutter..."
+    mkdir -p "$SDK_DIR"
+    git clone https://github.com/flutter/flutter.git -b stable "$FLUTTER_HOME"
+    chown -R abc:abc "$FLUTTER_HOME"
+fi
+
+# =========================
+# Install Android SDK (runtime)
+# =========================
+if [ ! -d "$ANDROID_HOME/cmdline-tools/latest" ]; then
+    echo "Installing Android SDK..."
+
+    mkdir -p "$ANDROID_HOME/cmdline-tools"
+
+    wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O /tmp/android.zip
+
+    unzip -q /tmp/android.zip -d "$ANDROID_HOME/cmdline-tools"
+
+    mv "$ANDROID_HOME/cmdline-tools/cmdline-tools" "$ANDROID_HOME/cmdline-tools/latest"
+
+    rm /tmp/android.zip
+
+    yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
+        "platform-tools" \
+        "platforms;android-34" \
+        "build-tools;34.0.0"
+
+    chown -R abc:abc "$ANDROID_HOME"
+fi
+
+# =========================
+# Extensions (reliable install)
 # =========================
 EXT_FILE="/defaults/extensions.txt"
 MARKER="/config/.extensions_installed"
@@ -38,10 +83,10 @@ if [ ! -f "$MARKER" ]; then
     touch "$MARKER"
     chown abc:abc "$MARKER"
 else
-    echo "Extensions already installed, skipping..."
+    echo "Extensions already installed"
 fi
 
 # =========================
-# Start container normally
+# Start container
 # =========================
 exec /init
