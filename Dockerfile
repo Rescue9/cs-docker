@@ -9,9 +9,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 # =========================
 RUN echo "BUILD VERSION 1.0.5 - $(date)" > /BUILD_VERSION
 
-RUN sed -i 's|http://archive.ubuntu.com/ubuntu|mirror://mirrors.ubuntu.com/mirrors.txt|g' /etc/apt/sources.list && \
-    sed -i 's|https://archive.ubuntu.com/ubuntu|mirror://mirrors.ubuntu.com/mirrors.txt|g' /etc/apt/sources.list   
-RUN echo "Updated /etc/apt/sources.list to choose best mirrors."
+RUN sed -i 's|http://archive.ubuntu.com/ubuntu|http://mirrors.krnk.org/ubuntu|g' /etc/apt/sources.list && \
+    sed -i 's|https://archive.ubuntu.com/ubuntu|https://mirrors.krnk.org/ubuntu|g' /etc/apt/sources.list
+RUN    echo "Updated /etc/apt/sources.list to use a static KRNK mirror."
 
 RUN apt-get update && \
     apt-get install -y \
