@@ -119,6 +119,12 @@ if [ ! -d "$ANDROID_HOME/cmdline-tools/latest" ]; then
         "build-tools;34.0.0"
 fi
 
+# Fix workspace permissions
+if [ -d /config/workspace ]; then
+    echo "Fixing workspace permissions..."
+    chown -R 1000:1000 /config/workspace
+fi
+
 # =========================
 # Start
 # =========================
