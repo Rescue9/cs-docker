@@ -7,7 +7,11 @@ ENV DEBIAN_FRONTEND=noninteractive
 # =========================
 # BUILD VERSION (change this to force rebuild)
 # =========================
-RUN echo "BUILD VERSION 1.0.4 - $(date)" > /BUILD_VERSION
+RUN echo "BUILD VERSION 1.0.5 - $(date)" > /BUILD_VERSION
+
+RUN sed -i 's|http://archive.ubuntu.com/ubuntu|mirror://mirrors.ubuntu.com/mirrors.txt|g' /etc/apt/sources.list && \
+    sed -i 's|https://archive.ubuntu.com/ubuntu|mirror://mirrors.ubuntu.com/mirrors.txt|g' /etc/apt/sources.list   
+RUN echo "Updated /etc/apt/sources.list to choose best mirrors."
 
 RUN apt-get update && \
     apt-get install -y \
