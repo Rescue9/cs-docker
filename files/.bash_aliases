@@ -13,6 +13,9 @@ fi
 export MYBIN=$HOME/bin
 export PATH=$PATH:$MYBIN
 
+# Dart bin path
+export PATH="$PATH":"$HOME/.pub-cache/bin"
+
 # SDK Paths
 export SDKS=$HOME/sdks
 export PATH=$PATH:$SDKS/flutter/bin

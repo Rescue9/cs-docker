@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # =========================
 # BUILD VERSION (change this to force rebuild)
 # =========================
-RUN echo "BUILD VERSION 1.0.2 - $(date)" > /BUILD_VERSION
+RUN echo "BUILD VERSION 1.0.3 - $(date)" > /BUILD_VERSION
 
 RUN apt-get update && \
     apt-get install -y \
@@ -32,4 +32,5 @@ RUN echo "===== SEARCHING FOR extensions.txt - $(date) =====" | tee /EXTENSIONS_
     find / -name "extensions.txt" 2>&1 | tee -a /EXTENSIONS_INFO || true
 
 ENTRYPOINT ["/usr/local/bin/init-config.sh"]
+RUN chown 1000:1000 -R config/workspace/
 CMD ["/init"]
