@@ -3,5 +3,45 @@
     "window.menuBarVisibility": "classic",
     "terminal.integrated.initialHint": false,
     "redhat.telemetry.enabled": false,
-    "remote.autoForwardPorts": false
+    "workbench.startupEditor": "none",
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false,
+
+    // --- Completion behavior ---
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    },
+    "editor.quickSuggestionsDelay": 50,          // fast popup
+    "editor.suggestOnTriggerCharacters": true,   // auto-complete on . (etc)
+    "editor.acceptSuggestionOnEnter": "on",      // accept with Enter again
+    "editor.suggest.insertMode": "replace",
+    "editor.suggest.showInlineDetails": false,   // no explanations
+    "editor.suggest.showTypeParameters": false,
+    "editor.suggest.showStatusBar": false,
+
+    // --- Inline suggestions (ghost text) ---
+    "editor.inlineSuggest.enabled": true,
+    "editor.inlineSuggest.minShowDelay": 50,     // fast inline suggestions
+    "editor.inlineSuggest.suppressSuggestions": false,
+    "editor.inlineSuggest.showToolbar": "never",
+
+    // --- Hovers (documentation popups) ---
+    "editor.hover.enabled": true,
+    "editor.hover.delay": 800,                   // small delay
+    "editor.hover.sticky": false,
+    "editor.hover.maxHeight": 200,               // prevents huge popups
+    "editor.hover.maxWidth": 300,
+
+    // --- Error popups ---
+    "editor.parameterHints.enabled": false,      // no signature help
+    "editor.inlayHints.enabled": "off",          // no inline explanations
+    "editor.lightbulb.enabled": true,            // still get quick fixes
+    "editor.showUnused": false,
+
+    // --- Workbench hover (UI tooltips) ---
+    "workbench.hover.delay": 800,
+    "workbench.hover.reducedDelay": 200
+
 }
