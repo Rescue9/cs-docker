@@ -30,7 +30,7 @@
     // --- Hovers (documentation popups) ---
     "editor.hover.enabled": true,
     "editor.hover.delay": 800,                   // small delay
-    "editor.hover.sticky": false,
+    "editor.hover.sticky": true,
     "editor.hover.maxHeight": 200,               // prevents huge popups
     "editor.hover.maxWidth": 300,
 
