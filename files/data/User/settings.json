@@ -28,7 +28,7 @@
     "editor.inlineSuggest.showToolbar": "never",
 
     // --- Hovers (documentation popups) ---
-    "editor.hover.enabled": true,
+    "editor.hover.enabled": "on",
     "editor.hover.delay": 800,                   // small delay
     "editor.hover.sticky": true,
     "editor.hover.maxHeight": 200,               // prevents huge popups
@@ -37,7 +37,7 @@
     // --- Error popups ---
     "editor.parameterHints.enabled": false,      // no signature help
     "editor.inlayHints.enabled": "off",          // no inline explanations
-    "editor.lightbulb.enabled": true,            // still get quick fixes
+    "editor.lightbulb.enabled": "on",            // still get quick fixes
     "editor.showUnused": false,
 
     // --- Workbench hover (UI tooltips) ---
