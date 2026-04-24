@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # =========================
 # BUILD VERSION (change this to force rebuild)
 # =========================
-RUN echo "BUILD VERSION 1.0.6 - $(date)" > /BUILD_VERSION
+RUN echo "BUILD VERSION 1.0.7 - $(date)" > /BUILD_VERSION
 
 RUN sed -i 's|http://archive.ubuntu.com/ubuntu|http://mirrors.krnk.org/ubuntu|g' /etc/apt/sources.list && \
     sed -i 's|https://archive.ubuntu.com/ubuntu|https://mirrors.krnk.org/ubuntu|g' /etc/apt/sources.list
