@@ -6,7 +6,7 @@
     "workbench.startupEditor": "none",
     "git.enableSmartCommit": true,
     "git.confirmSync": false,
-
+    
     // --- Completion behavior ---
     "editor.quickSuggestions": {
       "other": true,
@@ -20,28 +20,28 @@
     "editor.suggest.showInlineDetails": false,   // no explanations
     "editor.suggest.showTypeParameters": false,
     "editor.suggest.showStatusBar": false,
-
+  
     // --- Inline suggestions (ghost text) ---
     "editor.inlineSuggest.enabled": true,
     "editor.inlineSuggest.minShowDelay": 50,     // fast inline suggestions
     "editor.inlineSuggest.suppressSuggestions": false,
     "editor.inlineSuggest.showToolbar": "never",
-
+  
     // --- Hovers (documentation popups) ---
     "editor.hover.enabled": "on",
     "editor.hover.delay": 800,                   // small delay
     "editor.hover.sticky": true,
     "editor.hover.maxHeight": 200,               // prevents huge popups
     "editor.hover.maxWidth": 300,
-
+  
     // --- Error popups ---
     "editor.parameterHints.enabled": false,      // no signature help
-    "editor.inlayHints.enabled": "off",          // no inline explanations
-    "editor.lightbulb.enabled": "on",            // still get quick fixes
+    "editor.inlayHints.enabled": "off", // still get quick fixes
     "editor.showUnused": false,
-
+  
     // --- Workbench hover (UI tooltips) ---
     "workbench.hover.delay": 800,
-    "workbench.hover.reducedDelay": 200
-
+    "workbench.hover.reducedDelay": 200,
+    "workbench.editor.empty.hint": "hidden"
+  
 }
