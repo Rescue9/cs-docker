@@ -1,4 +1,39 @@
 #!/bin/bash
 
-# serve flutter web-server
-flutter run -d web-server --web-hostname 0.0.0.0 --web-port 5173
+# Default port
+PORT=5173
+FLAG_PORT=""
+
+# Parse optional -p flag
+while getopts "p:" opt; do
+  case $opt in
+    p)
+      FLAG_PORT="$OPTARG"
+      ;;
+    *)
+      echo "Usage: $0 [-p port] [port]"
+      exit 1
+      ;;
+  esac
+done
+
+# Remove processed options
+shift $((OPTIND - 1))
+
+# Error if both flag and positional port are supplied
+if [ -n "$FLAG_PORT" ] && [ -n "$1" ]; then
+  echo "Error: use either -p port or a positional port, not both."
+  echo "Usage: $0 [-p port] [port]"
+  exit 1
+fi
+
+# Use whichever was provided
+if [ -n "$FLAG_PORT" ]; then
+  PORT="$FLAG_PORT"
+elif [ -n "$1" ]; then
+  PORT="$1"
+fi
+
+# Serve Flutter web build
+# flutter run -d web-server --web-hostname 0.0.0.0 --web-port "$PORT"
+dhttpd --path ./build/web/ --port "$PORT"
