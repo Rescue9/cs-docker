@@ -11,6 +11,10 @@ services:
       - PROXY_DOMAIN=${PRXYDMN}  # optional
       - DEFAULT_WORKSPACE=/config/workspace # optional
       - CODE_SERVER_ALLOW_ORIGIN=*
+      # AI API Keys mapping
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      #- ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      #- GEMINI_API_KEY=${GEMINI_API_KEY:-}
     volumes:
       - ${CSHOME}:/config
     ports:
