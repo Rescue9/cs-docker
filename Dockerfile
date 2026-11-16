@@ -2,38 +2,57 @@ FROM lscr.io/linuxserver/code-server:latest
 
 USER root
 
-ENV DEBIAN_FRONTEND=noninteractive
+ARG DEBIAN_FRONTEND=noninteractive
+ARG BUILD_VERSION=1.1.0
 
-# =========================
-# BUILD VERSION (change this to force rebuild)
-# =========================
-RUN echo "BUILD VERSION 1.0.8 - $(date)" > /BUILD_VERSION
+# Build identification
+RUN printf 'BUILD VERSION %s\n' "${BUILD_VERSION} - $(date)" > /BUILD_VERSION
 
-RUN sed -i 's|http://archive.ubuntu.com/ubuntu|http://mirrors.krnk.org/ubuntu|g' /etc/apt/sources.list && \
-    sed -i 's|https://archive.ubuntu.com/ubuntu|https://mirrors.krnk.org/ubuntu|g' /etc/apt/sources.list
-RUN    echo "Updated /etc/apt/sources.list to use a static KRNK mirror."
-
+# Essential development dependencies
 RUN apt-get update && \
-    apt-get install -y \
-        unzip wget zip lsof xz-utils pkg-config \
-        build-essential clang lld cmake ninja-build \
-        libgtk-3-dev mesa-utils git ca-certificates \
-        rsync openjdk-21-jdk jq parallel curl \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    apt-get install -y --no-install-recommends \
+        unzip \
+        wget \
+        zip \
+        lsof \
+        xz-utils \
+        pkg-config \
+        build-essential \
+        clang \
+        lld \
+        cmake \
+        ninja-build \
+        libgtk-3-dev \
+        mesa-utils \
+        git \
+        ca-certificates \
+        rsync \
+        jq \
+        parallel \
+        curl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+# Persistent SDK locations
+ENV SDK_ROOT=/config/sdks
 
-# Extension cache directory (offline reuse)
+ENV ANDROID_HOME=/config/sdks/android
+ENV ANDROID_SDK_ROOT=/config/sdks/android
+
+ENV FLUTTER_HOME=/config/sdks/flutter
+
+ENV JAVA_HOME=/config/sdks/java/current
+
+# Persistent development caches
+ENV GRADLE_USER_HOME=/config/.gradle
+ENV PUB_CACHE=/config/.pub-cache
+ENV ANDROID_USER_HOME=/config/.android
+
+# Persistent extension cache
 ENV EXT_CACHE=/config/.extension-cache
-RUN mkdir -p /config/.extension-cache
 
-RUN rm -rf /defaults/*
-COPY ./files/ /defaults/
-COPY ./init-config.sh /usr/local/bin/init-config.sh
-RUN chmod +x /usr/local/bin/init-config.sh
+# Development PATH
+ENV PATH="${PATH}:/config/sdks/flutter/bin:/config/sdks/android/platform-tools:/config/sdks/android/cmdline-tools/latest/bin:/config/sdks/java/current/bin"
 
-RUN echo "===== SEARCHING FOR extensions.txt - $(date) =====" | tee /EXTENSIONS_INFO && \
-    find / -name "extensions.txt" 2>&1 | tee -a /EXTENSIONS_INFO || true
-
-ENTRYPOINT ["/usr/local/bin/init-config.sh"]
-CMD ["/init"]
+# No custom ENTRYPOINT or CMD.
+# Inherit LinuxServer's native /init startup process.
