@@ -6,7 +6,9 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG BUILD_VERSION=1.1.0
 
 # Build identification
-RUN printf 'BUILD VERSION %s\n' "${BUILD_VERSION} - $(date)" > /BUILD_VERSION
+RUN printf 'BUILD VERSION %s\nBUILD DATE %s\n' \
+    "${BUILD_VERSION}" "$(date -u '+%Y-%m-%d %H:%M:%S UTC')" \
+    > /BUILD_VERSION
 
 # Essential development dependencies
 RUN apt-get update && \
@@ -54,5 +56,5 @@ ENV EXT_CACHE=/config/.extension-cache
 # Development PATH
 ENV PATH="${PATH}:/config/sdks/flutter/bin:/config/sdks/android/platform-tools:/config/sdks/android/cmdline-tools/latest/bin:/config/sdks/java/current/bin"
 
-# No custom ENTRYPOINT or CMD.
-# Inherit LinuxServer's native /init startup process.
+# Inherit LinuxServer's native ENTRYPOINT and CMD.
+# No custom initialization scripts.

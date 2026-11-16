@@ -1,19 +1,32 @@
+
 services:
   code-server:
-    build: .
-    container_name: cs-git
-    environment:
-      - PUID=${UID}
-      - PGID=${GID}
-      - TZ=${TZ}
-      - PASSWORD=${PASSWD}        # optional
-      - SUDO_PASSWORD=${SUDOPWD}   # optional
-      - PROXY_DOMAIN=${PRXYDMN}  # optional
-      - DEFAULT_WORKSPACE=/config/workspace # optional
-      - CODE_SERVER_ALLOW_ORIGIN=*
-    volumes:
-      - ${CSHOME}:/config
-    ports:
-      - 127.0.0.1:8443:8443
-      - 127.0.0.1:5173:5173
+    container_name: code-server
+
+    image: code-server-dev:${BUILD_VERSION:-1.1.0}
+
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BUILD_VERSION: ${BUILD_VERSION:-1.1.0}
+
     restart: unless-stopped
+
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+
+      PASSWORD: ${PASSWD}
+      SUDO_PASSWORD: ${SUDOPWD}
+
+      PROXY_DOMAIN: ${PRXYDMN}
+      DEFAULT_WORKSPACE: ${DEFAULT_WORKSPACE}
+
+    volumes:
+      - ${CSHOME}/config:/config
+
+    ports:
+      - "${CODE_SERVER_PORT:-8443}:8443"
+      - "${DART_SERVER_PORT:-5173}:5173"
