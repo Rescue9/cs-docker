@@ -41,9 +41,9 @@ services:
       - "traefik.http.services.code-server.loadbalancer.server.port=8443"
 
       # Port-based development server proxy
-      - "traefik.http.routers.code-server-ports.rule=HostRegexp(`^[0-9]+\\.cs\\.corridor9design\\.com$`)"
-      - "traefik.http.routers.code-server-ports.entrypoints=web"
-      - "traefik.http.routers.code-server-ports.service=code-server"
+      #- "traefik.http.routers.code-server-ports.rule=HostRegexp(`^[0-9]+\\.cs\\.corridor9design\\.com$`)"
+      #- "traefik.http.routers.code-server-ports.entrypoints=web"
+      #- "traefik.http.routers.code-server-ports.service=code-server"
 
   forgejo:
     container_name: forgejo
