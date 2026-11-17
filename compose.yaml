@@ -30,20 +30,23 @@ services:
     networks:
       - cserver
 
+    ports:
+      - "${CODE_SERVER_PORT:-8443}:8443"
+
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=cserver"
 
       # Main code-server interface
-      - "traefik.http.routers.code-server.rule=Host(`cs.corridor9design.com`)"
-      - "traefik.http.routers.code-server.entrypoints=web"
-      - "traefik.http.routers.code-server.service=code-server"
-      - "traefik.http.services.code-server.loadbalancer.server.port=8443"
+      #- "traefik.http.routers.code-server.rule=Host(`cs.corridor9design.com`)"
+      #- "traefik.http.routers.code-server.entrypoints=web"
+      #- "traefik.http.routers.code-server.service=code-server"
+      #- "traefik.http.services.code-server.loadbalancer.server.port=8443"
 
       # Port-based development server proxy
-      #- "traefik.http.routers.code-server-ports.rule=HostRegexp(`^[0-9]+\\.cs\\.corridor9design\\.com$`)"
-      #- "traefik.http.routers.code-server-ports.entrypoints=web"
-      #- "traefik.http.routers.code-server-ports.service=code-server"
+      - "traefik.http.routers.code-server-ports.rule=HostRegexp(`^[0-9]+\\.cs\\.corridor9design\\.com$`)"
+      - "traefik.http.routers.code-server-ports.entrypoints=web"
+      - "traefik.http.routers.code-server-ports.service=code-server"
 
   forgejo:
     container_name: forgejo
